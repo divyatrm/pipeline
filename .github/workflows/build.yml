@@ -1,11 +1,6 @@
 name: My Workflow
 on:
-  push:
-    branches:
-      -master
-    paths:
-      - sample-java-app
-      - sample-app-2 
+  workflow_call:
 jobs:
   check_changes:
     runs-on: ubuntu-latest
