@@ -1,24 +1,22 @@
-name: Cross-Repo Build Workflow
+name: Build and Test
 on:
   push:
     branches:
       - master
-    paths:
-      - 'sample-java-app'
-      - 'simple-java-maven-app'
+  # pull_request:
+  #   branches:
+  #     - master
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo 1
+      - name: Checkout code
         uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
-          repository: divyatr/sample-java-app
-      - name: Checkout Repo 2
-        uses: actions/checkout@v2
-        with:
-          repository: divyatr/simple-java-maven-app
-      - name: Build
-        run: |
-          echo $GITHUB_REPOSITORY
-          mvn clean install
+          java-version: '11'
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      - name: Run tests
+        run: mvn test --file pom.xml
