@@ -10,11 +10,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Set up Java environment
+        uses: actions/setup-java@v1
         with:
           java-version: '11'
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Run tests
-        run: mvn test --file pom.xml
+        run: mvn clean install
+      - name: Run tests with Maven
+        run: mvn test
