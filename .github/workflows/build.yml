@@ -1,0 +1,26 @@
+name: My Workflow
+on:
+  workflow_call:
+    paths:
+      - sample-java-app
+      - sample-app-2 
+jobs:
+  check_changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Check for changes in all repos
+        run: |
+          if [ -z "$(git diff --name-only HEAD^ HEAD | grep -e 'repo1/' -e 'repo2/')" ]; then
+            echo "No changes detected in all required repositories"
+            exit 1
+          fi
+      - name: Build and test
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: Build with Maven
+        run: mvn clean install
+      - name: Run tests with Maven
+        run: mvn test
