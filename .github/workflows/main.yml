@@ -1,18 +1,24 @@
-name: Monitor Repositories
-
+name: Cross-Repo Build Workflow
 on:
   push:
     branches:
       - master
-
+    paths:
+      - 'sample-java-app'
+      - 'simple-java-maven-app'
 jobs:
-  monitor-repos:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: Determine which repository triggered the webhook
-      run: echo $GITHUB_REPOSITORY
-    - name: Build with Maven
-      run: mvn clean install
-    - name: Run tests with Maven
-      run: mvn test
-    # Perform the desired actions based on the repository that triggered the webhook
+      - name: Checkout Repo 1
+        uses: actions/checkout@v2
+        with:
+          repository: divyatr/sample-java-app
+      - name: Checkout Repo 2
+        uses: actions/checkout@v2
+        with:
+          repository: divyatr/simple-java-maven-app
+      - name: Build
+        run: |
+          echo $GITHUB_REPOSITORY
+          mvn clean install
